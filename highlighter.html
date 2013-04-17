@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <title>syntax highlighter demo</title>
+        <style>
+body {
+    background: #eee;
+}
+#input {
+    font-family: monospace;
+    font-weight: bold;
+    color: #ccc;
+    background: #333;
+}
+#input:hover {
+    background: #443;
+}
+#input .whitespace {
+    background: black;
+}
+#input .literal {
+    color: orange;
+}
+#input .name {
+    color: yellow;
+}
+#input .o_paren,
+#input .c_paren {
+    color: green;
+}
+#input .operator {
+    color: cyan;
+}
+#input .invalid {
+    color: white;
+    background: red;
+}
+        </style>
+    </head>
+    <body>
+        <p id="input" contenteditable="true">1+1</p>
+        <script src="expression-compiler.js"></script>
+        <script>
+document.getElementById("input").addEventListener("input", function() {
+    // console.log(this.index);
+    // var range = document.createRange();
+    // var selection = window.getSelection();
+    // var currentPosition = selection.getRangeAt(0).startOffset;
+    // console.log(currentPosition);
+    // range.setStart(this, currentPosition);
+    // range.collapse(true);
+    // selection.removeAllRanges();
+    // selection.addRange(range);
+    // // selection.collapseToStart();
+    // var current = selection.getRangeAt(0).startOffset;
+    console.log(window.getSelection(this).getRangeAt(0));
+    var marked = EXC.mark(this.textContent);
+    this.innerHTML = marked;
+    // selection.collapse(this, current + 1);
+}, false);
+
+        </script>
+    </body>
+</html>

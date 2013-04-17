@@ -1,0 +1,83 @@
+<script src="expression-compiler.js"></script>
+<script>
+var l = function(m,d){ document.write((d?'':"<pre>") + m + (d?'':"</pre>")); };
+var notify = function(msg, d) { console.log(msg); l(msg, d); };
+var assertEqual = function(ex, got, m) {
+    if (ex === got) notify("Good! " + ex);
+    else notify('FAIL: ' + ex + ' !== ' + got + (m ? ': ' + m : ''));
+};
+
+var standard_context = {
+    "r": 0.3,
+    "r'": 0.4,
+    "r|": 0.5
+};
+
+var testLexTypes = function(expression, expected) {
+    var tokens = EXC.lex(expression);
+    for (t=0; t< Math.max(expected.length, tokens.length); t++) {
+        assertEqual(expected[t], tokens[t][0]);
+    }
+};
+
+var testLexValues = function(exp, expected) {
+    tokens = EXC.lex(exp);
+    assertEqual(exp, expected);
+};
+
+var testExpression = function(exp, expected, ctx) {
+    ctx = (typeof ctx === "undefined") ? standard_context : ctx;
+    var compiled = new EXC(exp);
+    var evaluated = compiled.solve(ctx);
+    assertEqual(compiled());
+};
+
+(function() {
+    try {
+        EXC.lexMachine.getNext("!");
+    } catch (e) {
+        assertEqual(e, "invalid state machine exit");
+    }
+    assertEqual(EXC.lexMachine.getNext(" ").exitName, "whitespace");
+    assertEqual(EXC.lexMachine.getNext("0").exitName, "literal");
+    assertEqual(EXC.lexMachine.getNext("0").getNext(".").exitName, "literal");
+    assertEqual(EXC.lexMachine.getNext(".").getNext("1").exitName, "literal");
+    assertEqual(EXC.lexMachine.getNext("1").getNext("1").exitName, "literal");
+    assertEqual(EXC.lexMachine.getNext(".").exitName, null);
+    assertEqual(EXC.lexMachine.getNext("r").exitName, "name");
+    assertEqual(EXC.lexMachine.getNext("r").getNext("'").exitName, "name");
+    assertEqual(EXC.lexMachine.getNext("(").exitName, "o_paren");
+    assertEqual(EXC.lexMachine.getNext(")").exitName, "c_paren");
+    assertEqual(EXC.lexMachine.getNext("^").exitName, "operator");
+    assertEqual(EXC.lexMachine.getNext("*").exitName, "operator");
+    assertEqual(EXC.lexMachine.getNext("/").exitName, "operator");
+    assertEqual(EXC.lexMachine.getNext("+").exitName, "operator");
+    assertEqual(EXC.lexMachine.getNext("-").exitName, "operator");
+    assertEqual(EXC.lexMachine.getNext("<").exitName, "operator");
+    assertEqual(EXC.lexMachine.getNext(">").exitName, "operator");
+})();
+
+assertEqual(EXC.lex(" ")[0].name, "whitespace");
+assertEqual(EXC.lex("0")[0].name, "literal");
+assertEqual(EXC.lex("+")[0].name, "operator");
+
+assertEqual(EXC.compile("0").fn(), 0);
+assertEqual(EXC.compile("1").fn(), 1);
+// assertEqual(EXC.compile("-1").fn(), -1);
+assertEqual(EXC.compile("1-1").fn(), 0);
+assertEqual(EXC.compile("0-1").fn(), -1);
+assertEqual(EXC.compile("0+1").fn(), 1);
+assertEqual(EXC.compile("1+1").fn(), 2);
+// assertEqual(EXC.compile("-1+1").fn(), 0);
+assertEqual(EXC.compile("1*1").fn(), 1);
+assertEqual(EXC.compile("1*0").fn(), 0);
+assertEqual(EXC.compile("2*1").fn(), 2);
+assertEqual(EXC.compile("1/2").fn(), 0.5);
+assertEqual(EXC.compile("1/0").fn(), Infinity);
+assertEqual(+EXC.compile("1 > 0").fn(), 1);
+assertEqual(+EXC.compile("1 < 0").fn(), 0);
+assertEqual(EXC.compile("r").fn({r: 1}), 1);
+
+assertEqual(EXC.mark("1"), '<span class="literal">1</span>');
+
+</script>
