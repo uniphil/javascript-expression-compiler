@@ -1,7 +1,7 @@
 
 var ExpressionCompiler = (function() {
 
-    this.lexMachine = (function() { 
+    this.lexMachine = (function() {
         var TokenState = function(exitName) {
             this.exitName = exitName;
             this.links = [];
@@ -69,7 +69,7 @@ var ExpressionCompiler = (function() {
             try {
                 eat();
             } catch(e) {
-                state = {token_name: 'lex error'};
+                state = {exitName: 'invalid'};
                 idx = expression.length;
                 next_state = null;
             }
@@ -80,18 +80,6 @@ var ExpressionCompiler = (function() {
             });
         }
         return tokens;
-    };
-
-    this.mark = function(exp) {
-        var tokens = typeof exp == 'string' ? this.lex(exp) : exp,
-            token_index,
-            tk,
-            marked = "";
-        for (token_index = 0; token_index < tokens.length; token_index++) {
-            tk = tokens[token_index];
-            marked += '<span class="' + tk.name + '">' + tk.rep + '</span>';
-        }
-        return marked;
     };
 
     this.compile = (function() {
@@ -163,6 +151,37 @@ var ExpressionCompiler = (function() {
         };
         return compiler;
     })();
+
+    this.mark = function(exp) {
+        var tokens = typeof exp == 'string' ? this.lex(exp) : exp,
+            token_index,
+            tk,
+            marked = "";
+        for (token_index = 0; token_index < tokens.length; token_index++) {
+            tk = tokens[token_index];
+            marked += '<span class="expression-' + tk.name + '">' + tk.rep + '</span>';
+        }
+        return marked;
+    };
+
+    this.expressionInput = (function(EXC) {
+        return function(container_id) {
+            var container = document.getElementById(container_id),
+                colours = document.createElement("span"),
+                input = document.createElement("span");
+            container.setAttribute("class", "expression-container");
+            colours.setAttribute("class", "expression-colours");
+            input.setAttribute("class", "expression-input");
+            input.setAttribute("contenteditable", "true");
+            container.appendChild(colours);
+            container.appendChild(input);
+            var colour = function() {
+                colours.innerHTML=EXC.mark(EXC.lex(input.textContent));
+            };
+            input.addEventListener("input", colour, false);
+            colour();
+        };
+    })(this);
 
     return this;
 })();

@@ -1,65 +1,49 @@
 <!DOCTYPE html>
 <html>
-    <head>
-        <meta charset="utf-8" />
-        <title>syntax highlighter demo</title>
-        <style>
-body {
-    background: #eee;
-}
-#input {
-    font-family: monospace;
-    font-weight: bold;
-    color: #ccc;
-    background: #333;
-}
-#input:hover {
-    background: #443;
-}
-#input .whitespace {
-    background: black;
-}
-#input .literal {
-    color: orange;
-}
-#input .name {
-    color: yellow;
-}
-#input .o_paren,
-#input .c_paren {
-    color: green;
-}
-#input .operator {
-    color: cyan;
-}
-#input .invalid {
-    color: white;
-    background: red;
-}
-        </style>
-    </head>
-    <body>
-        <p id="input" contenteditable="true">1+1</p>
-        <script src="expression-compiler.js"></script>
-        <script>
-document.getElementById("input").addEventListener("input", function() {
-    // console.log(this.index);
-    // var range = document.createRange();
-    // var selection = window.getSelection();
-    // var currentPosition = selection.getRangeAt(0).startOffset;
-    // console.log(currentPosition);
-    // range.setStart(this, currentPosition);
-    // range.collapse(true);
-    // selection.removeAllRanges();
-    // selection.addRange(range);
-    // // selection.collapseToStart();
-    // var current = selection.getRangeAt(0).startOffset;
-    console.log(window.getSelection(this).getRangeAt(0));
-    var marked = EXC.mark(this.textContent);
-    this.innerHTML = marked;
-    // selection.collapse(this, current + 1);
-}, false);
+<head>
+<meta charset="utf-8" />
+<title>syntax highlighter demo</title>
+<style>
 
-        </script>
-    </body>
+body { background: #666; }
+.expression-container {
+    position: relative;
+    height: 1.3rem;
+    width: 24rem;
+}
+.expression-colours,
+.expression-input {
+    display: block;
+    position: absolute;
+    margin: 0;
+    padding: 0 0.3rem;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    font-size: inherit;
+    line-height: 1.3rem;
+    font-family: monospace;
+}
+.expression-colours { background: #222; }
+.expression-input { color: rgba(127, 127, 127, 0); }
+.expression-over { background: #443; }
+.expression-whitespace {}
+.expression-literal { color: hsl(31, 79%, 64%); }
+.expression-name { color: hsl(48, 100%, 80%); }
+.expression-o_paren,
+.expression-c_paren { color: hsl(170, 53%, 84%); }
+.expression-operator { color: hsl(209, 39%, 65%); font-weight: bold; }
+.expression-invalid { color: white; background: hsl(0, 56%, 44%); }
+
+</style>
+</head>
+<body>
+<div id="input-container"></div>
+
+<script src="expression-compiler.js"></script>
+<script>
+EXC.expressionInput("input-container");
+</script>
+</body>
 </html>

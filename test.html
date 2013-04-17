@@ -79,5 +79,6 @@ assertEqual(+EXC.compile("1 < 0").fn(), 0);
 assertEqual(EXC.compile("r").fn({r: 1}), 1);
 
 assertEqual(EXC.mark("1"), '<span class="literal">1</span>');
+assertEqual(EXC.mark("! 1 r"), '<span class="invalid">! 1 r</span>');
 
 </script>
