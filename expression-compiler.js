@@ -165,16 +165,16 @@ var ExpressionCompiler = (function() {
     };
 
     this.expressionInput = (function(EXC) {
-        return function(container_id) {
-            var container = document.getElementById(container_id),
-                colours = document.createElement("span"),
+        return function(con) {
+            con = typeof con === 'string' ? document.getElementById(con) : con;
+            var colours = document.createElement("span"),
                 input = document.createElement("span");
-            container.setAttribute("class", "expression-container");
+            con.setAttribute("class", "expression-container");
             colours.setAttribute("class", "expression-colours");
             input.setAttribute("class", "expression-input");
             input.setAttribute("contenteditable", "true");
-            container.appendChild(colours);
-            container.appendChild(input);
+            con.appendChild(colours);
+            con.appendChild(input);
             var colour = function() {
                 colours.innerHTML=EXC.mark(EXC.lex(input.textContent));
             };
