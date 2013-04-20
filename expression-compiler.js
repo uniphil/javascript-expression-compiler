@@ -243,7 +243,6 @@ var ExpressionCompiler = (function() {
             return open;
         } else {
             if (tokens.length !== 1) {
-                console.log(tokens);
                 throw "Parse error -- check operators and brackets.";
             }
             return tokens;
