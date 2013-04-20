@@ -34,51 +34,55 @@ var testExpression = function(exp, expected, ctx) {
 
 (function() {
     try {
-        EXC.lexMachine.getNext("!");
+        EXC.lex_machine.get_next("!");
     } catch (e) {
         assertEqual(e, "invalid state machine exit");
     }
-    assertEqual(EXC.lexMachine.getNext(" ").exitName, "whitespace");
-    assertEqual(EXC.lexMachine.getNext("0").exitName, "literal");
-    assertEqual(EXC.lexMachine.getNext("0").getNext(".").exitName, "literal");
-    assertEqual(EXC.lexMachine.getNext(".").getNext("1").exitName, "literal");
-    assertEqual(EXC.lexMachine.getNext("1").getNext("1").exitName, "literal");
-    assertEqual(EXC.lexMachine.getNext(".").exitName, null);
-    assertEqual(EXC.lexMachine.getNext("r").exitName, "name");
-    assertEqual(EXC.lexMachine.getNext("r").getNext("'").exitName, "name");
-    assertEqual(EXC.lexMachine.getNext("(").exitName, "o_paren");
-    assertEqual(EXC.lexMachine.getNext(")").exitName, "c_paren");
-    assertEqual(EXC.lexMachine.getNext("^").exitName, "operator");
-    assertEqual(EXC.lexMachine.getNext("*").exitName, "operator");
-    assertEqual(EXC.lexMachine.getNext("/").exitName, "operator");
-    assertEqual(EXC.lexMachine.getNext("+").exitName, "operator");
-    assertEqual(EXC.lexMachine.getNext("-").exitName, "operator");
-    assertEqual(EXC.lexMachine.getNext("<").exitName, "operator");
-    assertEqual(EXC.lexMachine.getNext(">").exitName, "operator");
+    assertEqual(EXC.lex_machine.get_next(" ").name, "whitespace");
+    assertEqual(EXC.lex_machine.get_next("0").name, "literal");
+    assertEqual(EXC.lex_machine.get_next("0").get_next(".").name, "literal");
+    assertEqual(EXC.lex_machine.get_next(".").get_next("1").name, "literal");
+    assertEqual(EXC.lex_machine.get_next("1").get_next("1").name, "literal");
+    assertEqual(EXC.lex_machine.get_next(".").name, null);
+    assertEqual(EXC.lex_machine.get_next("r").name, "name");
+    assertEqual(EXC.lex_machine.get_next("r").get_next("'").name, "name");
+    assertEqual(EXC.lex_machine.get_next("(").name, "o_paren");
+    assertEqual(EXC.lex_machine.get_next(")").name, "c_paren");
+    assertEqual(EXC.lex_machine.get_next("^").name, "power");
+    assertEqual(EXC.lex_machine.get_next("*").name, "multiply");
+    assertEqual(EXC.lex_machine.get_next("/").name, "divide");
+    assertEqual(EXC.lex_machine.get_next("+").name, "plus");
+    assertEqual(EXC.lex_machine.get_next("-").name, "minus");
+    assertEqual(EXC.lex_machine.get_next("<").name, "less");
+    assertEqual(EXC.lex_machine.get_next(">").name, "greater");
 })();
 
 assertEqual(EXC.lex(" ")[0].name, "whitespace");
 assertEqual(EXC.lex("0")[0].name, "literal");
-assertEqual(EXC.lex("+")[0].name, "operator");
+assertEqual(EXC.lex("+")[0].name, "plus");
 
-assertEqual(EXC.compile("0").fn(), 0);
-assertEqual(EXC.compile("1").fn(), 1);
-// assertEqual(EXC.compile("-1").fn(), -1);
-assertEqual(EXC.compile("1-1").fn(), 0);
-assertEqual(EXC.compile("0-1").fn(), -1);
-assertEqual(EXC.compile("0+1").fn(), 1);
-assertEqual(EXC.compile("1+1").fn(), 2);
-// assertEqual(EXC.compile("-1+1").fn(), 0);
-assertEqual(EXC.compile("1*1").fn(), 1);
-assertEqual(EXC.compile("1*0").fn(), 0);
-assertEqual(EXC.compile("2*1").fn(), 2);
-assertEqual(EXC.compile("1/2").fn(), 0.5);
-assertEqual(EXC.compile("1/0").fn(), Infinity);
-assertEqual(+EXC.compile("1 > 0").fn(), 1);
-assertEqual(+EXC.compile("1 < 0").fn(), 0);
-assertEqual(EXC.compile("r").fn({r: 1}), 1);
+assertEqual(EXC.compile("0")(), 0);
+assertEqual(EXC.compile("1")(), 1);
+assertEqual(EXC.compile("-1")(), -1);
+assertEqual(EXC.compile("1-1")(), 0);
+assertEqual(EXC.compile("0-1")(), -1);
+assertEqual(EXC.compile("0+1")(), 1);
+assertEqual(EXC.compile("1+1")(), 2);
+assertEqual(EXC.compile("-1+1")(), 0);
+assertEqual(EXC.compile("1*1")(), 1);
+assertEqual(EXC.compile("1*0")(), 0);
+assertEqual(EXC.compile("2*1")(), 2);
+assertEqual(EXC.compile("1/2")(), 0.5);
+assertEqual(EXC.compile("1/0")(), Infinity);
+assertEqual(+EXC.compile("1 > 0")(), 1);
+assertEqual(+EXC.compile("1 < 0")(), 0);
+assertEqual(EXC.compile("r")({r: 1}), 1);
 
 assertEqual(EXC.mark("1"), '<span class="expression-literal">1</span>');
 assertEqual(EXC.mark("! 1 r"), '<span class="expression-invalid">! 1 r</span>');
+
+assertEqual(EXC.compile("(1)")(), 1);
+assertEqual(EXC.compile("(1+1)")(), 2);
+assertEqual(EXC.compile("(1+1)*2")(), 4);
 
 </script>
