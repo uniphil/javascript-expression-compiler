@@ -131,7 +131,8 @@ var ExpressionCompiler = (function() {
                 if (/plus|minus/.test(token.name)) {
                     previous = tokens[index - 1];
                     if (index === 0 ||
-                        /binary_operator/.test(previous.type)) {
+                        /binary_operator/.test(previous.type) ||
+                        /^o_/.test(previous.name)) {
                         token.type = 'unary_operator';
                     } else {
                         token.type = 'binary_operator';
