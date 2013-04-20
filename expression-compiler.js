@@ -131,7 +131,7 @@ var ExpressionCompiler = (function() {
                 if (/plus|minus/.test(token.name)) {
                     previous = tokens[index - 1];
                     if (index === 0 ||
-                        /bracket|binary_operator/.test(previous.type)) {
+                        /binary_operator/.test(previous.type)) {
                         token.type = 'unary_operator';
                     } else {
                         token.type = 'binary_operator';
@@ -242,6 +242,7 @@ var ExpressionCompiler = (function() {
             return open;
         } else {
             if (tokens.length !== 1) {
+                console.log(tokens);
                 throw "Parse error -- check operators and brackets.";
             }
             return tokens;
