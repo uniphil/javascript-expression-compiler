@@ -258,4 +258,5 @@ var ExpressionCompiler = (function() {
     };
 });
 
-var EXC = new ExpressionCompiler();
+
+module.exports = new ExpressionCompiler();

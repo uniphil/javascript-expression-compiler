@@ -1,0 +1,30 @@
+{
+  "name": "javascript-expression-compiler",
+  "version": "0.0.0",
+  "description": "Compile untrusted strings into a javascript function with contextual variables",
+  "main": "expression-compiler.js",
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/uniphil/javascript-expression-compiler.git"
+  },
+  "keywords": [
+    "math",
+    "compiler",
+    "expression",
+    "function",
+    "context",
+    "formula"
+  ],
+  "author": "Phil",
+  "license": "BSD",
+  "bugs": {
+    "url": "https://github.com/uniphil/javascript-expression-compiler/issues"
+  },
+  "homepage": "https://github.com/uniphil/javascript-expression-compiler",
+  "devDependencies": {
+    "mocha": "^1.21.4"
+  }
+}
