@@ -1,5 +1,5 @@
 {
-  "name": "javascript-expression-compiler",
+  "name": "expression-compiler",
   "version": "0.0.0",
   "description": "Compile untrusted strings into a javascript function with contextual variables",
   "main": "expression-compiler.js",
